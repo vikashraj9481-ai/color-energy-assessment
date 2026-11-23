@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Colour Energy Assessment</title>
+<style>
+:root{--bg:#f3f1f8;--fg:#1a1630;--mut:#6b6684;--card:rgba(255,255,255,.7);--line:rgba(26,22,48,.12);--red:#d1253b;--yel:#f2a516;--grn:#4d9a3a;--blu:#1f6fd1;--acc:#d1253b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0c1d;--fg:#f2effa;--mut:#a39dbd;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.14)}}
+:root[data-theme="dark"]{--bg:#0f0c1d;--fg:#f2effa;--mut:#a39dbd;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.14)}
+*{box-sizing:border-box}html{color-scheme:light dark}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--fg);font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;overflow-x:hidden;transition:background .6s}
+.blobs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.blobs i{position:absolute;width:46vmax;height:46vmax;border-radius:50%;filter:blur(90px);opacity:.38;transition:background 1.2s;animation:drift 18s ease-in-out infinite alternate}
+.blobs i:nth-child(1){background:var(--red);left:-12vmax;top:-12vmax}
+.blobs i:nth-child(2){background:var(--yel);right:-14vmax;top:10vh;animation-delay:-5s}
+.blobs i:nth-child(3){background:var(--grn);left:-8vmax;bottom:-16vmax;animation-delay:-9s}
+.blobs i:nth-child(4){background:var(--blu);right:-10vmax;bottom:-14vmax;animation-delay:-13s}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+main{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:22px 18px 90px}
+.screen{display:none}.screen.on{display:block;animation:in .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(24px) scale(.98);filter:blur(6px)}}
+h1{font-size:clamp(2.2rem,7vw,4.4rem);line-height:1.02;margin:0 0 16px;letter-spacing:-.03em}
+h1 b{background:linear-gradient(90deg,var(--red),var(--yel),var(--grn),var(--blu),var(--red));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+p.lead{font-size:1.1rem;color:var(--mut);max-width:560px;line-height:1.6}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;color:#fff;padding:15px 30px;border-radius:99px;background:linear-gradient(135deg,var(--red),#8e2bd1,var(--blu));background-size:200% 200%;box-shadow:0 10px 30px -8px rgba(143,43,209,.6);transition:transform .25s,box-shadow .25s,opacity .3s;animation:flow2 5s ease infinite}
+@keyframes flow2{50%{background-position:100% 100%}}
+.btn:hover:not(:disabled){transform:translateY(-3px) scale(1.04)}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.35;cursor:not-allowed;animation:none}
+.btn.ghost{background:var(--card);color:var(--fg);box-shadow:none;border:1px solid var(--line)}
+.btn:focus-visible,.chip:focus-visible{outline:3px solid var(--blu);outline-offset:3px}
+.hero{display:grid;gap:30px;align-items:center;min-height:78vh}
+@media(min-width:760px){.hero{grid-template-columns:1.1fr .9fr}}
+.orb{width:min(320px,70vw);aspect-ratio:1;margin:auto;position:relative;animation:spin 22s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orb span{position:absolute;width:50%;height:50%;transition:transform .5s}
+.orb span:nth-child(1){left:0;top:0;background:var(--blu);border-radius:100% 0 0 0}
+.orb span:nth-child(2){right:0;top:0;background:var(--red);border-radius:0 100% 0 0}
+.orb span:nth-child(3){right:0;bottom:0;background:var(--yel);border-radius:0 0 100% 0}
+.orb span:nth-child(4){left:0;bottom:0;background:var(--grn);border-radius:0 0 0 100%}
+.orb:hover span:nth-child(1){transform:translate(-8px,-8px)}.orb:hover span:nth-child(2){transform:translate(8px,-8px)}.orb:hover span:nth-child(3){transform:translate(8px,8px)}.orb:hover span:nth-child(4){transform:translate(-8px,8px)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;padding:12px 16px;margin:0 -6px 18px;border-radius:20px;background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);display:flex;align-items:center;gap:14px}
+.bar{flex:1;height:10px;border-radius:9px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--blu),var(--grn),var(--yel),var(--red));transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.cnt{font-weight:800;min-width:92px;text-align:right;font-variant-numeric:tabular-nums}
+.words{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:6px 0 30px}
+.chip{--c:var(--acc);border:1.5px solid var(--line);background:var(--card);color:var(--fg);font:inherit;font-size:1.02rem;padding:11px 20px;border-radius:99px;cursor:pointer;opacity:0;animation:pop .6s cubic-bezier(.3,1.5,.5,1) forwards,bob 5s ease-in-out infinite;animation-delay:var(--d),calc(var(--d) + .6s);transition:background .3s,color .3s,border-color .3s,box-shadow .3s,transform .25s}
+@keyframes pop{from{opacity:0;transform:translateY(30px) scale(.6)}to{opacity:1;transform:none}}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.chip:hover{border-color:var(--c);transform:scale(1.08) !important}
+.chip.sel{background:var(--c);border-color:var(--c);color:#fff;font-weight:700;box-shadow:0 8px 24px -6px var(--c);animation:pop .01s forwards,boing .5s}
+@keyframes boing{40%{transform:scale(1.22) rotate(-3deg)}}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:14px 18px calc(14px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:12px;background:linear-gradient(transparent,var(--bg) 55%)}
+.load{min-height:70vh;display:grid;place-content:center;text-align:center;gap:24px}
+.load svg{width:140px;margin:auto;animation:spin 1.6s linear infinite}
+.load h2{margin:0;font-size:1.6rem}.load p{margin:0;color:var(--mut);min-height:1.5em;transition:opacity .3s}
+.res{display:grid;gap:26px}
+@media(min-width:820px){.res{grid-template-columns:1fr 1fr;align-items:start}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:24px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.wheelbox{position:relative}.wheelbox svg{width:100%;max-width:440px;display:block;margin:auto;overflow:visible}
+.wheelbox text{font-weight:800;font-size:11px;fill:#fff;letter-spacing:.1em;text-anchor:middle;pointer-events:none}
+.badge{display:inline-block;padding:7px 16px;border-radius:99px;font-weight:700;color:#fff;background:var(--acc);margin-bottom:10px;transition:background .6s}
+.type{font-size:clamp(2.2rem,6vw,3.4rem);margin:4px 0 10px;letter-spacing:-.03em;line-height:1}
+.vibe{font-size:1.15rem;margin:0 0 6px;font-weight:700}
+.row{margin:15px 0}.row .t{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px}
+.row .b{height:14px;background:var(--line);border-radius:9px;overflow:hidden}.row .b i{display:block;height:100%;width:0;border-radius:9px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.tags span{padding:6px 13px;border-radius:99px;font-size:.9rem;color:#fff;animation:pop .5s backwards}
+h3{margin:18px 0 8px;font-size:1.05rem}.card p{line-height:1.6;margin:6px 0;color:var(--mut)}
+.acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s !important;animation-iteration-count:1 !important;transition-duration:.01s !important}}
+
+.bd{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:9;display:none;gap:8px}.bd.on{display:flex}.bd .btn{padding:9px 18px;font-size:.85rem}
+form{display:grid;gap:16px;margin-top:20px;max-width:560px}label{display:grid;gap:6px;font-weight:700;font-size:.92rem}
+input,textarea{font:inherit;font-weight:400;color:var(--fg);background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;outline:0;transition:border-color .25s,box-shadow .25s,transform .25s;width:100%}
+input:focus,textarea:focus{border-color:var(--blu);box-shadow:0 0 0 4px rgba(31,111,209,.2);transform:translateY(-2px)}
+.err{color:var(--red);font-size:.82rem;font-weight:600;min-height:1em}
+.ok{width:110px;height:110px;border-radius:50%;background:var(--grn);display:grid;place-content:center;margin:0 0 20px;animation:pop .7s cubic-bezier(.3,1.6,.5,1)}.ok svg{width:56px;stroke:#fff;stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:dr .6s .5s forwards}@keyframes dr{to{stroke-dashoffset:0}}
+.li{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;width:100%;text-align:left;margin:10px 0;cursor:pointer;font:inherit;color:var(--fg);transition:transform .25s,border-color .25s}.li:hover{transform:translateX(6px) scale(1.01);border-color:var(--acc)}
+.av{width:46px;height:46px;border-radius:50%;display:grid;place-content:center;color:#fff;font-weight:800}.li small{color:var(--mut);display:block}
+.mini{display:flex;width:110px;height:8px;border-radius:9px;overflow:hidden}.mini i{display:block;height:100%}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:8px 0 16px}.kv b{color:var(--mut);font-weight:600}.kv span{word-break:break-word}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(30px);background:var(--fg);color:var(--bg);padding:12px 22px;border-radius:99px;opacity:0;transition:.4s;z-index:20;pointer-events:none}.toast.on{opacity:1;transform:translateX(-50%)}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head><body>
+<div class="blobs"><i></i><i></i><i></i><i></i></div>
+<div class="bd" id="bd"><button class="btn ghost" id="bAdm">Candidates</button><button class="btn ghost" id="bPrev">Preview test</button></div>
+<main>
+<section class="screen on" id="s0"><div class="hero"><div>
+<h1>Discover your <b>colour energy</b></h1>
+<p class="lead">A short word-selection assessment. First share a few details, then choose the words that describe you. Your answers go straight to our hiring team.</p>
+<button class="btn" id="start">Begin assessment</button></div>
+<div class="orb"><span></span><span></span><span></span><span></span></div></div></section>
+
+<section class="screen" id="s6"><h1 style="font-size:clamp(2rem,6vw,3rem)">Your details</h1><p class="lead">We need these to match your assessment to you.</p>
+<form id="f" novalidate>
+<label>Full name<input id="fn" autocomplete="name"><span class="err"></span></label>
+<label>Phone number<input id="fp" type="tel" autocomplete="tel"><span class="err"></span></label>
+<label>Date of birth<input id="fd" type="date"><span class="err"></span></label>
+<label>Email address<input id="fe" type="email" autocomplete="email"><span class="err"></span></label>
+<label>Address<textarea id="fa" rows="3" autocomplete="street-address"></textarea><span class="err"></span></label>
+<div><button class="btn" type="submit">Continue to words</button></div></form></section>
+
+<section class="screen" id="s1">
+<div class="top"><div class="bar"><i id="pb"></i></div><div class="cnt" id="cnt">0 / 12</div></div>
+<p class="lead" style="margin:0 auto 14px;text-align:center">Tap every word that describes you. Choose at least 12.</p>
+<div class="words" id="words"></div>
+<div class="dock"><button class="btn ghost" id="clr">Clear</button><button class="btn" id="go" disabled>Submit assessment</button></div></section>
+
+<section class="screen" id="s2"><div class="load">
+<svg viewBox="0 0 100 100"><path d="M50 50V0A50 50 0 0 1 100 50Z" fill="#d1253b"/><path d="M50 50H100A50 50 0 0 1 50 100Z" fill="#f2a516"/><path d="M50 50V100A50 50 0 0 1 0 50Z" fill="#4d9a3a"/><path d="M50 50H0A50 50 0 0 1 50 0Z" fill="#1f6fd1"/></svg>
+<h2>Submitting your answers</h2><p>Please wait a moment…</p></div></section>
+
+<section class="screen" id="s7"><div class="load"><div class="ok" id="okc"><svg viewBox="0 0 60 60"><path d="M14 31l10 10 22-22"/></svg></div>
+<h2 id="th">Thank you</h2><p id="tp" style="max-width:420px">Your assessment has been submitted. Our team will review it and contact you.</p><div><button class="btn" id="retry" style="display:none">Try again</button></div></div></section>
+
+<section class="screen" id="s4"><h1 style="font-size:clamp(2rem,6vw,3rem)">Candidates</h1>
+<input id="q" placeholder="Search name, email or type" style="max-width:420px;margin:6px 0 10px"><p class="lead" id="cn" style="font-size:.95rem;margin:6px 0 10px"></p>
+<div id="list"></div><div class="acts"><button class="btn ghost" id="csv">Export all as CSV</button></div></section>
+
+<section class="screen" id="s3"><button class="btn ghost" id="back" style="margin-bottom:16px;padding:10px 20px">Back to list</button><div class="res">
+<div class="card wheelbox"><svg viewBox="0 0 320 320" id="wheel" role="img" aria-label="Colour energy wheel"></svg></div>
+<div class="card"><span class="badge" id="badge"></span><h2 class="type" id="type"></h2><p class="vibe" id="vibe"></p><p id="desc"></p>
+<div class="kv" id="kv"></div><div id="bars"></div>
+<h3>Selected words</h3><div class="tags" id="tags"></div>
+<h3>Strengths</h3><p id="str"></p><h3>Watch out for</h3><p id="wat"></p>
+<div class="acts"><button class="btn" id="pdf">Download PDF</button><button class="btn ghost" id="mail">Email summary</button></div></div></div></section>
+</main><div class="toast" id="toast"></div>
+<script>
+const C={red:{n:"Fiery Red",c:"#d1253b",key:"R"},yel:{n:"Sunshine Yellow",c:"#f2a516",key:"Y"},grn:{n:"Earth Green",c:"#4d9a3a",key:"G"},blu:{n:"Cool Blue",c:"#1f6fd1",key:"B"}};
+const W={red:"challenging determined firm active driving strong-willed purposeful forceful courageous decisive daring",
+yel:"cheerful enthusiastic fun convincing sociable persuasive influencing optimistic outgoing mobile friendly engaging impulsive",
+grn:"caring reliable sensitive accommodating steady harmonious tactful constant amenable patient co-operative stable loyal calm",
+blu:"reflective concise well-argued factual objective structured accurate calculating cautious diplomatic logical conventional consistent correct analytical exact realistic"};
+const INFO={
+red:{vibe:"Bold, driven and direct",d:"Energised by goals, speed and results. Decides quickly, takes charge and pushes things forward.",s:"Decisive, competitive, resilient and focused on outcomes.",w:"Can come across as impatient or blunt."},
+yel:{vibe:"Bright, social and inspiring",d:"Energised by people, ideas and possibilities. Brings warmth and enthusiasm into every room.",s:"Persuasive, optimistic and creative. Builds connections and lifts the mood.",w:"Can lose focus on detail or follow-through."},
+grn:{vibe:"Calm, caring and steady",d:"Energised by harmony, trust and helping others. People feel safe and heard around them.",s:"Patient, loyal and dependable. Listens well and keeps teams together.",w:"Can avoid conflict or resist sudden change."},
+blu:{vibe:"Thoughtful, precise and analytical",d:"Energised by facts, quality and clear thinking. Checks the details before acting.",s:"Accurate, objective and well-prepared. Spots risks others miss.",w:"Can overthink or seem distant."}};
+const T={RY:"Motivator",RG:"Steward",RB:"Reformer",YR:"Inspirer",YG:"Harmoniser",YB:"Persuader",GY:"Supporter",GR:"Anchor",GB:"Guardian",BR:"Strategist",BY:"Evaluator",BG:"Coordinator"};
+const $=id=>document.getElementById(id),MIN=12,sel=new Set(),all=[];
+for(const k in W)W[k].split(" ").forEach(w=>all.push({w,k}));
+let db=null,uid=null,isAdmin=false,rows=[],cur=null,det=null,unsub=null;
+function show(n){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id=="s"+n));window.scrollTo({top:0,behavior:"smooth"})}
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),2600)}
+function mk(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function build(){const b=$("words");b.innerHTML="";[...all].sort(()=>Math.random()-.5).forEach((o,i)=>{const e=mk("button","chip",o.w);e.type="button";e.style.setProperty("--c",C[o.k].c);e.style.setProperty("--d",i*28+"ms");e.setAttribute("aria-pressed","false");
+e.onclick=()=>{const on=!sel.has(o.w);on?sel.add(o.w):sel.delete(o.w);e.classList.toggle("sel",on);e.setAttribute("aria-pressed",on);upd()};b.appendChild(e)})}
+function upd(){const n=sel.size;$("cnt").textContent=n+" / "+MIN+(n>MIN?"+":"");$("pb").style.width=Math.min(100,n/MIN*100)+"%";$("go").disabled=n<MIN}
+function analyse(words){const sc={red:0,yel:0,grn:0,blu:0};all.forEach(o=>{if(words.includes(o.w))sc[o.k]++});const t=words.length||1,pct={};for(const k in sc)pct[k]=Math.round(sc[k]/t*100);
+const r=Object.keys(sc).sort((a,b)=>sc[b]-sc[a]);return{sc,pct,primary:r[0],secondary:r[1],type:T[C[r[0]].key+C[r[1]].key]}}
+/* candidate flow */
+let me={};
+$("start").onclick=()=>show(6);
+const V={fn:v=>v.trim().length>=2||"Enter your full name",fp:v=>/^\+?[0-9 ()-]{7,18}$/.test(v.trim())||"Enter a valid phone number",
+fd:v=>{const d=new Date(v);return(v&&d<new Date()&&d.getFullYear()>1920)||"Enter a valid date of birth"},fe:v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim())||"Enter a valid email address",fa:v=>v.trim().length>=8||"Enter your full address"};
+$("f").onsubmit=e=>{e.preventDefault();let ok=true;for(const id in V){const el=$(id),r=V[id](el.value),er=el.parentNode.querySelector(".err");er.textContent=r===true?"":r;if(r!==true)ok=false}
+if(!ok)return;me={name:$("fn").value.trim(),phone:$("fp").value.trim(),dob:$("fd").value,email:$("fe").value.trim(),address:$("fa").value.trim()};show(1)};
+$("clr").onclick=()=>{sel.clear();document.querySelectorAll(".chip").forEach(c=>c.classList.remove("sel"));upd()};
+$("go").onclick=submit;$("retry").onclick=submit;
+async function submit(){show(2);const words=[...sel],a=analyse(words),t0=Date.now();let ok=false,msg="";
+try{if(!db)throw 0;await db.doc("submissions/"+uid).set({...me,words,...a,at:Date.now()});ok=true;try{localStorage.setItem("ce_done","1")}catch(e){}}catch(e){msg=db?"We couldn’t save your answers. Check your connection and try again.":"Submission needs you to open this link signed in to claude.ai with permission to respond. Ask the team for access."}
+setTimeout(()=>{$("okc").style.display=ok?"grid":"none";$("th").textContent=ok?"Thank you":"Not submitted";$("tp").textContent=ok?"Your assessment has been submitted. Our team will review it and contact you.":msg;$("retry").style.display=ok?"none":"inline-block";show(7)},Math.max(0,1800-(Date.now()-t0)))}
+/* admin */
+const ang={red:[0,90],yel:[90,180],grn:[180,270],blu:[270,360]};
+const pt=(r,a)=>{a=a*Math.PI/180;return[160+r*Math.sin(a),160-r*Math.cos(a)]};
+const sl=(k,r)=>{const[a0,a1]=ang[k],p=pt(r,a0),q=pt(r,a1);return`M160 160L${p[0]} ${p[1]}A${r} ${r} 0 0 1 ${q[0]} ${q[1]}Z`};
+function wheel(sc){const s=$("wheel"),mx=Math.max(...Object.values(sc),1);
+s.innerHTML='<circle cx="160" cy="160" r="150" fill="none" stroke="var(--line)" stroke-dasharray="3 6"/><circle cx="160" cy="160" r="90" fill="none" stroke="var(--line)" stroke-dasharray="3 6"/>'+Object.keys(C).map(k=>`<path data-p="${k}" fill="${C[k].c}"/><text data-t="${k}">${C[k].n.toUpperCase()}</text>`).join("");
+const tg={};for(const k in sc)tg[k]=sc[k]?70+80*sc[k]/mx:60;const t0=performance.now();
+(function f(n){const e=Math.min(1,(n-t0)/1500),z=1-Math.pow(1-e,3);for(const k in C){const r=1+(tg[k]-1)*z;s.querySelector(`[data-p=${k}]`).setAttribute("d",sl(k,r));const m=pt(r*.62,(ang[k][0]+ang[k][1])/2),t=s.querySelector(`[data-t=${k}]`);t.setAttribute("x",m[0]);t.setAttribute("y",m[1]);t.style.opacity=z}if(e<1)requestAnimationFrame(f)})(t0)}
+function dt(ms){return new Date(ms).toLocaleString()}
+function open(r){det=r;const p=r.primary,s=r.secondary;document.documentElement.style.setProperty("--acc",C[p].c);
+$("badge").textContent=C[p].n+" + "+C[s].n;$("type").textContent=r.type;$("vibe").textContent=INFO[p].vibe;$("desc").textContent=INFO[p].d+" Second energy: "+C[s].n.toLowerCase()+" ("+INFO[s].vibe.toLowerCase()+").";
+$("str").textContent=INFO[p].s;$("wat").textContent=INFO[p].w;
+const kv=$("kv");kv.innerHTML="";[["Name",r.name],["Phone",r.phone],["Date of birth",r.dob],["Email",r.email],["Address",r.address],["Submitted",dt(r.at)]].forEach(([a,b])=>{kv.append(mk("b","",a),mk("span","",b))});
+const rk=Object.keys(r.sc).sort((a,b)=>r.sc[b]-r.sc[a]),bs=$("bars");bs.innerHTML="";
+rk.forEach(k=>{const row=mk("div","row"),t=mk("div","t"),b=mk("div","b"),i=mk("i");t.append(mk("span","",C[k].n),mk("span","",r.pct[k]+"% ("+r.sc[k]+" words)"));i.style.background=C[k].c;b.append(i);row.append(t,b);bs.append(row);setTimeout(()=>i.style.width=r.pct[k]+"%",200)});
+const tg=$("tags");tg.innerHTML="";r.words.forEach((w,i)=>{const o=all.find(x=>x.w==w),sp=mk("span","",w);sp.style.background=C[o?o.k:"red"].c;sp.style.animationDelay=i*40+"ms";tg.append(sp)});
+show(3);wheel(r.sc)}
+function renderList(){const q=$("q").value.toLowerCase(),L=$("list");L.innerHTML="";const f=rows.filter(r=>(r.name+r.email+r.type).toLowerCase().includes(q));$("cn").textContent=rows.length?f.length+" of "+rows.length+" candidates":"No submissions yet. Share the link with candidates.";
+f.forEach(r=>{const b=mk("button","card li"),av=mk("div","av",(r.name||"?")[0].toUpperCase()),m=mk("div"),mn=mk("div","mini");av.style.background=C[r.primary].c;
+m.append(mk("b","",r.name),mk("small","",r.type+" · "+C[r.primary].n+" + "+C[r.secondary].n),mk("small","",dt(r.at)));
+Object.keys(C).forEach(k=>{const i=mk("i");i.style.width=(r.pct[k]||0)+"%";i.style.background=C[k].c;mn.append(i)});b.append(av,m,mn);b.onclick=()=>open(r);L.append(b)})}
+$("q").oninput=renderList;$("back").onclick=()=>show(4);
+$("bAdm").onclick=()=>show(4);$("bPrev").onclick=()=>show(0);
+async function boot(){
+try{const u=await claude.use("user");if(u){uid=await u.id();isAdmin=await u.canEdit()}db=await claude.use("db")}catch(e){}
+if(!uid)uid="c"+Math.random().toString(36).slice(2,12);
+try{if(localStorage.getItem("ce_done")&&!isAdmin){$("th").textContent="Already submitted";show(7);return}}catch(e){}
+if(isAdmin&&db){$("bd").classList.add("on");show(4);
+unsub=db.collection("submissions").onSnapshot(s=>{rows=s.docs.map(d=>d.data()).filter(r=>r&&r.sc).sort((a,b)=>b.at-a.at);renderList()},()=>{$("cn").textContent="Couldn’t load submissions."})}}
+/* exports */
+$("mail").onclick=()=>{const r=det,t=`Colour energy result\n\nName: ${r.name}\nType: ${r.type} (${C[r.primary].n} + ${C[r.secondary].n})\nPhone: ${r.phone}\nEmail: ${r.email}\nDOB: ${r.dob}\n\n`+Object.keys(C).map(k=>C[k].n+": "+r.pct[k]+"%").join("\n")+`\n\nVibe: ${INFO[r.primary].vibe}\nWords: ${r.words.join(", ")}`;
+const a=document.createElement("a");a.href="mailto:?subject="+encodeURIComponent("Assessment result: "+r.name)+"&body="+encodeURIComponent(t);a.target="_blank";a.click()};
+async function save(name,data){const d=await claude.use("downloads");if(!d)return toast("Downloads aren’t available in this view");try{await d.save({filename:name,data})}catch(e){if(e.code!="declined")toast("Couldn’t save the file")}}
+$("csv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"';save("candidates.csv",["Name,Phone,DOB,Email,Address,Type,Primary,Secondary,Red%,Yellow%,Green%,Blue%,Submitted,Words"].concat(rows.map(r=>[r.name,r.phone,r.dob,r.email,r.address,r.type,C[r.primary].n,C[r.secondary].n,r.pct.red,r.pct.yel,r.pct.grn,r.pct.blu,dt(r.at),r.words.join(" ")].map(q).join(","))).join("\n"))};
+$("pdf").onclick=()=>{if(!window.jspdf)return toast("PDF library didn’t load. Check connection.");const r=det,D=new jspdf.jsPDF(),c=C[r.primary].c;
+D.setFillColor(c);D.rect(0,0,210,38,"F");D.setTextColor("#ffffff");D.setFontSize(22);D.setFont("helvetica","bold");D.text("Colour Energy Assessment",15,22);D.setFontSize(11);D.setFont("helvetica","normal");D.text("Submitted "+dt(r.at),15,31);
+D.setTextColor("#1a1630");D.setFontSize(20);D.setFont("helvetica","bold");D.text(r.name,15,54);D.setFontSize(14);D.setTextColor(c);D.text(r.type+"  |  "+C[r.primary].n+" + "+C[r.secondary].n,15,63);
+D.setTextColor("#444444");D.setFontSize(10.5);D.setFont("helvetica","normal");[["Phone",r.phone],["Email",r.email],["Date of birth",r.dob]].forEach((x,i)=>D.text(x[0]+": "+x[1],15,74+i*6));D.text(D.splitTextToSize("Address: "+r.address,100),15,92);
+const cx=155,cy=82,mx=Math.max(...Object.values(r.sc),1);for(const k in C){const R=12+26*(r.sc[k]/mx),[a0,a1]=ang[k];D.setFillColor(C[k].c);D.setDrawColor(C[k].c);for(let i=0;i<24;i++){const a=(a0+(a1-a0)*i/24)*Math.PI/180,b=(a0+(a1-a0)*(i+1)/24)*Math.PI/180;D.triangle(cx,cy,cx+R*Math.sin(a),cy-R*Math.cos(a),cx+R*Math.sin(b),cy-R*Math.cos(b),"FD")}}
+let y=122;D.setTextColor("#1a1630");D.setFont("helvetica","bold");D.setFontSize(13);D.text("Energy balance",15,y);y+=8;
+Object.keys(C).sort((a,b)=>r.sc[b]-r.sc[a]).forEach(k=>{D.setFont("helvetica","normal");D.setFontSize(10.5);D.setTextColor("#333333");D.text(C[k].n,15,y);D.setFillColor("#e8e6ee");D.rect(60,y-4,110,5,"F");D.setFillColor(C[k].c);D.rect(60,y-4,1.1*r.pct[k],5,"F");D.text(r.pct[k]+"%",175,y);y+=9});
+y+=4;[["Vibe",INFO[r.primary].vibe+". "+INFO[r.primary].d],["Strengths",INFO[r.primary].s],["Watch out for",INFO[r.primary].w],["Selected words",r.words.join(", ")]].forEach(([h,t])=>{D.setFont("helvetica","bold");D.setFontSize(12);D.setTextColor("#1a1630");D.text(h,15,y);y+=6;D.setFont("helvetica","normal");D.setFontSize(10.5);D.setTextColor("#444444");const ln=D.splitTextToSize(t,180);D.text(ln,15,y);y+=ln.length*5+6});
+save(r.name.replace(/[^a-z0-9]+/gi,"_")+"_assessment.pdf",D.output("blob"))};
+build();upd();boot();
+</script></body></html>
